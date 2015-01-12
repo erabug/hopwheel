@@ -6,14 +6,7 @@ var data = Array.apply(0, Array(16)).map(function(category, i) {
     return [axis, rating];
 });
 
-data.forEach(function(coord) {
-    console.log(coord);
-})
-
-// ensure the final rating connects to the first
-data.push(data[0]);
-
-var width = 960,
+var width = 600,
     height = 450,
     radius = Math.min(width, height) / 2 - 30;
 
@@ -83,6 +76,12 @@ ga.append("text")
 svg.append("path")
     .datum(data)
     .attr("class", "line")
-    .attr("d", line); // converts to polar coordinates
+    .attr("d", function(d) { return line(d) + "Z";}); // converts to polar coordinates
 
 // svg.select("path").remove();
+
+$('.category-ratings').html('<b>BEER: Random</b>');
+data.forEach(function(coord, i) {
+    console.log(categories[i], coord[1]);
+    $('.category-ratings').append('<div>' + categories[i] + ': ' + coord[1] + '\n</div>');
+});

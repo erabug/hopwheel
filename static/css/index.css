@@ -1,5 +1,23 @@
-.axis text {
+body {
     font-family: 'Signika', sans-serif;
+}
+
+h1 {
+    /*display: inline-block;*/
+    margin: 20px 0 0 20px;
+}
+
+.category-ratings {
+    display: inline-block;
+    margin: 20px 0 0 20px;
+    vertical-align: top;
+}
+
+.wheel {
+    display: inline-block;
+}
+
+.axis text {
     font-size: 16px;
 }
 
