@@ -1,6 +1,7 @@
 // generate array of [category axis, rating] arrays
 var data = Array.apply(0, Array(16)).map(function(category, i) {
     var rating = Math.floor(Math.random() * (6 - 0) + 0);
+    // var rating = 2;
     var axis = 0.393 * i;
     return [axis, rating];
 });
@@ -9,7 +10,7 @@ var data = Array.apply(0, Array(16)).map(function(category, i) {
 data.push(data[0]);
 
 var width = 960,
-    height = 500,
+    height = 450,
     radius = Math.min(width, height) / 2 - 30;
 
 var r = d3.scale.linear()
@@ -19,7 +20,8 @@ var r = d3.scale.linear()
 // converts an x, y coord pair into polar coord
 var line = d3.svg.line.radial()
     .radius(function(d) { return r(d[1]); })
-    .angle(function(d) { return -d[0] + Math.PI / 2; });
+    .angle(function(d) { return -d[0] + Math.PI / 2; })
+    .interpolate("basis");
 
 var svg = d3.select(".wheel").append("svg")
     .attr("width", width)
@@ -36,30 +38,57 @@ var gr = svg.append("g")
 gr.append("circle")
     .attr("r", r);
 
-gr.append("text")
+gr.append("text") // rating score labels
     .attr("y", function(d) { return -r(d) - 4; })
-    .attr("transform", "rotate(15)")
+    .attr("transform", "rotate(11.25)")
     .style("text-anchor", "middle")
     .text(function(d) { return d; });
+
+var categories = [
+    'Fruit (ester)', 'Alcohol', 'Fruit (citrus)', 'Hops', 'Flowers', 'Spice',
+    'Malt', 'Toffee', 'Roast', 'Sulphur', 'Sweet', 'Sour', 'Bitterness',
+    'Astringency', 'Body', 'Linger'
+];
+
+var labels = d3.range(0, 360, 22.5).map(function(degree, i) {
+    var label = categories[i];
+    return {'degree': degree, 'label': label};
+});
 
 var ga = svg.append("g")
     .attr("class", "a axis")
   .selectAll("g")
-    .data(d3.range(0, 360, 22.5))
+    .data(labels)
   .enter().append("g")
-    .attr("transform", function(d) { return "rotate(" + -d + ")"; });
+    .attr("transform", function(d) { return "rotate(" + -d.degree + ")"; });
 
-ga.append("line")
+ga.append("line") // rating axes lines
     .attr("x2", radius);
 
 ga.append("text")
-    .attr("x", radius + 6)
+    .attr("x", radius + 12) // centering the middle?
     .attr("dy", ".35em")
-    .style("text-anchor", function(d) { return d < 270 && d > 90 ? "end" : null; })
-    .attr("transform", function(d) { return d < 270 && d > 90 ? "rotate(180 " + (radius + 6) + ",0)" : null; })
-    .text(function(d) { return d + "°"; });
+    .attr("transform", function(d) {
+        return d.degree <= 180 ?
+            "rotate(90 " + (radius + 14) + ",0)" :
+            "rotate(270 " + (radius + 12) + ",0)";
+    })
+    .style("text-anchor", "middle")
+    .text(function(d) { return d.label; });
 
 svg.append("path")
     .datum(data)
     .attr("class", "line")
-    .attr("d", line); // converts to polar coordinates?
+    .attr("d", line); // converts to polar coordinates
+
+// var totalLength = svg.select("path").node().getTotalLength();
+
+// svg.select("path")
+//   .attr("stroke-dasharray", totalLength + " " + totalLength)
+//   .attr("stroke-dashoffset", totalLength)
+//   .transition()
+//     .duration(2000)
+//     .ease("linear")
+//     .attr("stroke-dashoffset", 0);
+
+// svg.select("path").remove();
