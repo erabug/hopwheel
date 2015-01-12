@@ -1,20 +1,27 @@
-var data = d3.range(0, 2 * Math.PI, .01).map(function(t) {
-  return [t, Math.sin(2 * t) * Math.cos(2 * t)];
+// generate array of [category axis, rating] arrays
+var data = Array.apply(0, Array(16)).map(function(category, i) {
+    var rating = Math.floor(Math.random() * (6 - 0) + 0);
+    var axis = 0.393 * i;
+    return [axis, rating];
 });
+
+// ensure the final rating connects to the first
+data.push(data[0]);
 
 var width = 960,
     height = 500,
     radius = Math.min(width, height) / 2 - 30;
 
 var r = d3.scale.linear()
-    .domain([0, .5])
+    .domain([0, 5])
     .range([0, radius]);
 
+// converts an x, y coord pair into polar coord
 var line = d3.svg.line.radial()
     .radius(function(d) { return r(d[1]); })
     .angle(function(d) { return -d[0] + Math.PI / 2; });
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".wheel").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
@@ -38,7 +45,7 @@ gr.append("text")
 var ga = svg.append("g")
     .attr("class", "a axis")
   .selectAll("g")
-    .data(d3.range(0, 360, 30))
+    .data(d3.range(0, 360, 22.5))
   .enter().append("g")
     .attr("transform", function(d) { return "rotate(" + -d + ")"; });
 
@@ -55,4 +62,4 @@ ga.append("text")
 svg.append("path")
     .datum(data)
     .attr("class", "line")
-    .attr("d", line);
+    .attr("d", line); // converts to polar coordinates?
