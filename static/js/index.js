@@ -6,6 +6,10 @@ var data = Array.apply(0, Array(16)).map(function(category, i) {
     return [axis, rating];
 });
 
+data.forEach(function(coord) {
+    console.log(coord);
+})
+
 // ensure the final rating connects to the first
 data.push(data[0]);
 
@@ -21,7 +25,7 @@ var r = d3.scale.linear()
 var line = d3.svg.line.radial()
     .radius(function(d) { return r(d[1]); })
     .angle(function(d) { return -d[0] + Math.PI / 2; })
-    .interpolate("basis");
+    .interpolate("monotone");
 
 var svg = d3.select(".wheel").append("svg")
     .attr("width", width)
@@ -80,15 +84,5 @@ svg.append("path")
     .datum(data)
     .attr("class", "line")
     .attr("d", line); // converts to polar coordinates
-
-// var totalLength = svg.select("path").node().getTotalLength();
-
-// svg.select("path")
-//   .attr("stroke-dasharray", totalLength + " " + totalLength)
-//   .attr("stroke-dashoffset", totalLength)
-//   .transition()
-//     .duration(2000)
-//     .ease("linear")
-//     .attr("stroke-dashoffset", 0);
 
 // svg.select("path").remove();

@@ -16,7 +16,8 @@
 }
 
 .line {
-    fill: none;
-    stroke: red;
+    fill: #FF0000;
+    opacity: 0.6;
+    stroke: #BF0000;
     stroke-width: 2px;
 }
