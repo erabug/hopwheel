@@ -93,21 +93,26 @@ function drawRatingsPath(data) {
 
 var data = generateRatingData(false);
 drawRatingsPath(data);
+updateCategoryRatings(data);
 // svg.select("path").remove();
 
-$('.category-ratings').html('<tr><td class="header">Category</td>' +
-    '<td class="header">Rating</td></tr>');
 
-data.forEach(function(coord, i) {
-    $('.category-ratings').append('<tr><td class="category-cell">' +
-        categories[i] + '</td><td class="rating-cell">' + (coord[1] - 1) +
-        '</td></tr>');
-});
+
+function updateCategoryRatings(data) {
+    $('.category-ratings').html('<tr><td class="header">Category</td>' +
+    '<td class="header">Rating</td></tr>');
+    data.forEach(function(coord, i) {
+        $('.category-ratings').append('<tr><td class="category-cell">' +
+            categories[i] + '</td><td class="rating-cell">' + (coord[1] - 1) +
+            '</td></tr>');
+    });
+}
 
 $('#random-wheel').click(function() {
     svg.select("path").remove();
     var data = generateRatingData(true);
     drawRatingsPath(data);
+    updateCategoryRatings(data);
 });
 
 
