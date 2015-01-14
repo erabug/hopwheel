@@ -99,10 +99,10 @@ function drawRatingsAxes() {
 
 function drawRatingsPath(data) {
     svg.selectAll("path").remove();
-    svg.append("path")
+    svg.insert("path", ':first-child')
         .datum(data)
         .attr("class", "line")
-        .attr("d", function(d) { return line(d) + "Z"; })
+        .attr("d", function(d) { return line(d) + " Z"; })
         .style("fill", function() {
             return "hsl(" + Math.random() * 360 + ",100%,50%)";
         });
