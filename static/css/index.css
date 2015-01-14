@@ -38,6 +38,10 @@ input {
     fill: #FFF;
     stroke: #666;
     stroke-width: 1px;
+    z-index: 1;
+}
+.click-circle:hover {
+    cursor: pointer;
 }
 
 .axis text {

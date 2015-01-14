@@ -67,7 +67,9 @@ function drawRatingsAxes() {
             .data(labels)
         .enter().append("g")
             .attr("id", function(d, i) { return categoryKeys[i]; })
-            .attr("transform", function(d) { return "rotate(" + -d.degree + ")"; });
+            .attr("transform", function(d) {
+                return "rotate(" + -d.degree + ")";
+            });
 
     ga.append("line") // rating axes lines
         .attr("x2", radius);
@@ -85,10 +87,10 @@ function drawRatingsAxes() {
 
     ga.selectAll('circle')
             .data([[1.5, 1], [1.5, 2], [1.5, 3], [1.5, 4], [1.5, 5]])
-            .enter().append("circle")
+        .enter().append("circle")
             .attr('class', 'click-circle')
             .attr('id', function(d, i) {
-                return this.parentNode.id + d[1].toString();
+                return this.parentNode.id + '|' + (d[1] - 1).toString();
             })
             .attr('cx', function(d) { return r(d[1]); })
             .attr('cy', function(d) { return -d[0] + Math.PI / 2; })
@@ -116,17 +118,24 @@ function updateCategoryRatings(data) {
     });
 }
 
+function update(data) {
+    drawRatingsPath(data);
+    updateCategoryRatings(data);
+}
+
 // on page load
 drawRings();
 drawRatingsAxes();
 var data = generateRatingsPath();
-drawRatingsPath(data);
-data = updateRatingsPath(data, 'Alcohol', 2);
-data = updateRatingsPath(data, 'Sour', 3);
-drawRatingsPath(data);
-updateCategoryRatings(data);
+update(data);
 
-
-
+$('.click-circle').click(function() {
+    console.log('hey');
+    var info = this.id.split('|');
+    var category = info[0];
+    var rating = parseInt(info[1], 10) + 1;
+    updateRatingsPath(data, category, rating);
+    update(data);
+});
 
 
